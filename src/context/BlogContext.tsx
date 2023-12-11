@@ -3,9 +3,14 @@ import createDataContext from './createDataContext';
 type BlogPost = {
   id: number;
   title: string;
+  content: string;
+};
+type BlogAction = {
+  type: 'delete_blogpost' | 'add_blogpost' | 'edit_blogpost';
+  payload: any;
 };
 
-const blogReducer = (state: BlogPost[], action: any) => {
+const blogReducer = (state: BlogPost[] = [], action: BlogAction) => {
   switch (action.type) {
     case 'delete_blogpost':
       return state.filter(blogpost => blogpost.id !== action.payload);
@@ -21,9 +26,12 @@ const blogReducer = (state: BlogPost[], action: any) => {
       ];
 
     case 'edit_blogpost':
-      return state.map(blogPost => {
-        return blogPost.id === action.payload.id ? action.payload : blogPost;
-      });
+      return state.map(blogPost =>
+        blogPost.id === action.payload.id ? action.payload : blogPost,
+      );
+
+    default:
+      return state;
   }
 };
 
